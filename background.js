@@ -1,3 +1,5 @@
+var resultHTML = "";
+
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		// if (request.method == "getName") {
@@ -11,25 +13,30 @@ chrome.runtime.onMessage.addListener(
 		// 		sendResponse({data:"data sent!"});
 		// 	});
 		// }
-		if (request.greeting == "name") {
-			//alert("get here!!!");
-			requestHTML();
-			sendResponse({msg: "great!!"});
-			//getName(sendResponse);
+		// if (request.greeting == "name") {
+		// 	//alert("get here!!!");
+		// 	requestHTML();
+		// 	sendResponse({msg: "great!!"});
+		// 	//getName(sendResponse);
+		// }
+		poke_name = request.name;
+		poke_cp = request.cp;
+		poke_id = request.id;
+		requestHTML(poke_name, poke_cp, poke_id);
+		if (resultHTML != null) {
+			sendResponse({msg: resultHTML});
 		}
 	}
 );
 
-function requestHTML() {
+function requestHTML(poke_name, poke_cp, poke_id) {
 	var request = new XMLHttpRequest();
-	request.open('GET', "https://pokeassistant.com/main/evolver?utf8=%E2%9C%93&search_pokemon_name=Squirtle&search_cp=200&search_pokemon_id=7&locale=en&commit=Evolve", true);
+	var url = "https://pokeassistant.com/main/evolver?utf8=%E2%9C%93&search_pokemon_name=" + poke_name +"&search_cp=" + poke_cp + "&search_pokemon_id=" + poke_id + "&locale=en&commit=Evolve";
+	//console.log("url is " + url);
+	request.open('GET', url, true);
 	request.onload = function () {
-		var resultHTML = request.responseText;
+		resultHTML += request.responseText;
 		console.log(resultHTML);
-		var resultDiv = document.createElement("div");
-		resultDiv.innerHTML = resultHTML;
-		console.log(resultDiv.getElementsByClassName("table evolvetable")[0].innerHTML);
-
 	}
 	request.send();
 
