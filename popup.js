@@ -1,5 +1,10 @@
 window.onload = function() {
 	document.getElementById("evolve").onclick = getCP;
+	document.getElementById("cp_button").onclick = setVisible;
+}
+
+function setVisible() {
+	document.getElementById("cp_cal").style.visibility = "visible";
 }
 
 function getCP() {
@@ -18,7 +23,6 @@ function getCP() {
 			console.log(response.msg);
 			var resultDiv = document.createElement("div");
 			resultDiv.innerHTML = response.msg;
-			//console.log(resultDiv);
 			var lst_evolve = resultDiv.getElementsByClassName("table evolvetable")[0].getElementsByClassName("evolverow");
 			//console.log(lst_evolve.length);
 			var result_table = document.getElementById("result");

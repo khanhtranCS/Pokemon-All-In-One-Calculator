@@ -1,0 +1,30 @@
+#result {
+	border: 1px black solid;
+	border-collapse: collapse;
+}
+
+body {
+	width: 200px;
+}
+
+#cp_input {
+	width: 45px;
+}
+
+#button {
+	text-align: center;
+	margin-top: 10px;
+}
+
+#cp_cal {
+	visibility: hidden;
+	clear: both;
+	text-align: center;
+	padding-top: 10px;
+}
+
+#cp_button, #snipe_button {
+	padding: 5px;
+	border: 1px solid green;
+	float: left;
+}
