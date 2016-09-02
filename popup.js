@@ -1,13 +1,37 @@
+var success = false;
 window.onload = function() {
 	document.getElementById("evolve").onclick = getCP;
 	document.getElementById("cp_button").onclick = setVisible;
+	document.getElementById("snipe_button").onclick = setVisible;
+	document.getElementById("iv_button").onclick = setVisible;
 }
 
 function setVisible() {
-	document.getElementById("cp_cal").style.visibility = "visible";
+	// if the cp button is clicked
+	if (this.id == "cp_button") {
+		setVisibleByType("block", "none", "none");
+	} else if(this.id == "iv_button") {  // if iv button is clicked
+		setVisibleByType("none", "block", "none");
+	} else if(this.id == "snipe_button") {  // if snipe button is clicked
+		setVisibleByType("none", "none", "block");
+	}
+	//document.getElementById("cp_cal").style.display = "block";
+}
+
+/*
+ * function that help reduce code redundancy
+ * @para string that represent either block or none
+ * which will be used for interactive display
+ */
+function setVisibleByType(cp, iv, snipe) {
+	document.getElementById("cp_cal").style.display = cp;
+	document.getElementById("iv_cal").style.display = iv;
+	document.getElementById("snipe").style.display = snipe;
 }
 
 function getCP() {
+	console.log("getCP is called");
+	document.getElementById("result").style.display = "none";
 	document.getElementById("result").innerHTML = "";
 	var poke_cp = document.getElementById("cp_input").value;
 	//console.log("current cp" + poke_cp);
@@ -18,25 +42,40 @@ function getCP() {
 	if (poke_cp == "") {
 		alert("please input poke cp");
 	} else {
-		chrome.runtime.sendMessage({name: poke_name, cp: poke_cp, id: poke_id}, 
+		chrome.runtime.sendMessage({type: "CPSearcher",name: poke_name, cp: poke_cp, id: poke_id}, 
 		function(response) {
-			console.log(response.msg);
+			//console.log(response.msg);
 			var resultDiv = document.createElement("div");
+			// if response is undefined, call getCP again, so that user need not to click the button again
+			if (response == undefined || !success) {
+				document.getElementById("result").style.display = "none";
+				document.getElementById("status").style.display = "block";
+				getCP();
+				return;
+			}
+			document.getElementById("status").style.display = "none";
 			resultDiv.innerHTML = response.msg;
 			var lst_evolve = resultDiv.getElementsByClassName("table evolvetable")[0].getElementsByClassName("evolverow");
 			//console.log(lst_evolve.length);
 			var result_table = document.getElementById("result");
+			var row_cp_name = document.createElement("tr");
+			var row_name = document.createElement("td");
+			row_name.innerHTML = "Name";
+			var row_cp = document.createElement("td")
+			row_cp.innerHTML = "CP";
+			row_cp_name.appendChild(row_name);
+			row_cp_name.appendChild(row_cp);
+			result_table.appendChild(row_cp_name);
 			for (var i = 0; i < lst_evolve.length; i++) {
 				var tr_el = document.createElement("tr");
 				//console.log("iter: " + i);
 				// first td of tr, which contain poke name
 				var lst_td = lst_evolve[i].getElementsByTagName("td");
 				// possible involve value
-				// var big_val = lst_evolve[i].getElementsByClassName("evolvebig")[0].textContent;
-				// var small_val = lst_evolve[i].getElementsByClassName("evolvesmall");
 				//console.log("poke name is " + lst_td[0].textContent);
 				var td_name = document.createElement("td");
-				td_name.innerHTML = lst_td[0].textContent;
+				// retrive pokemon's name, and put it into column div
+				td_name.innerHTML = lst_td[0].textContent.replace(/[0-9]/g, '');
 				var row_cp = lst_td[1].outerHTML;
 				//console.log(row_cp);
 				tr_el.innerHTML = td_name.outerHTML;
@@ -50,6 +89,7 @@ function getCP() {
 				// }
 
 			}
+			document.getElementById("result").style.display = "inline-block";
 			//console.log(resultDiv.getElementsByClassName("table evolvetable")[0].getElementsByClassName("evolverow")[0].outerHTML);
 			//document.getElementById("display").innerHTML = resultDiv.getElementsByClassName("table evolvetable")[0].outerHTML;
 		});

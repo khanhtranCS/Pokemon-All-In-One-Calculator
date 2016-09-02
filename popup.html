@@ -7,8 +7,11 @@
 
 </head>
 <body>
-	<div id="cp_button">CP calculator</div>
-	<div id="snipe_button">Poke Sniper</div>
+	<div id = "all_button">
+		<div id="cp_button" value="cp">CP calculator</div>
+		<div id="iv_button" value="iv">IV calculator</div>
+		<div id="snipe_button" value="snipe">Poke Sniper</div>
+	</div>
 	<div id="cp_cal">
 		<select id="op_animal">
 			<option value="001">Bulbasaur</option>
@@ -164,10 +167,17 @@
 			<option value="151">Mew</option>
 		</select>
 		<input type="text" name="cp" id="cp_input"/>
+		<h6 id="status">loading...</h6>
+		<table id="result"></table>
 		<br/>
 		<div id="button">
 			<button id="evolve">Evolve</button>
 		</div>
-		<table id = "result"></table>
+	</div>
+	<div id="iv_cal">
+		<h3>IV Cal</h3>
+	</div>
+	<div id="snipe">
+		<h3>Snipe Cal</h3>
 	</div>
 	</html>
