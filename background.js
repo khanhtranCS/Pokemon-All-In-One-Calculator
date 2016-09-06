@@ -1,5 +1,6 @@
 var resultHTML = "";
 var JSON_string = "";
+// fetching data for poke's location
 requestPokeLoc();
 
 chrome.runtime.onMessage.addListener(
@@ -37,7 +38,7 @@ chrome.runtime.onMessage.addListener(
 				if (JSON_string != "") {
 					sendResponse({msg: JSON_string});
 				} else {
-					alert("shjt !!!");
+					console.log("error!!!");
 				}
 			}
 		}

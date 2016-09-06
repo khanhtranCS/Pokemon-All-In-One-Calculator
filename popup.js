@@ -100,6 +100,78 @@ function getCP() {
 function processSnipe() {
 	chrome.runtime.sendMessage({type: "poke_snipe"},
 		function(response) {
-			console.log(response.msg);
+			display_snipe_info(JSON.parse(response.msg));
 		});
+}
+
+function display_snipe_info(poke_locations) {
+	lst_locations = poke_locations.results;
+	var result = document.getElementById("snipe_result");
+	for (var i = 0; i < lst_locations.length; i++) {
+		var curr_poke = lst_locations[i];
+		if (curr_poke.rarity == "rare" || curr_poke.rarity == "very_rare"
+				|| curr_poke.rarity == "special" || curr_poke.rarity == "legendary") {
+
+			// create random color
+			var r = Math.round(Math.random() * 256);
+			var g = Math.round(Math.random() * 256);
+			var b = Math.round(Math.random() * 256);
+			
+			// create rbg(r,b,g) color in string representative
+			//var rbg_color = "rbg(" + r + ", " + b + ", " + g + ")";
+			
+
+			var whole_poke_div = document.createElement("div");
+			whole_poke_div.className = "whole_poke_div";
+			//whole_poke_div.style.border = "5px solid " + rgb(r,g,b);
+
+			// getting poke's icon
+			var img = document.createElement("img");
+			img.src = curr_poke.icon;
+			img.alt = curr_poke.name + "img";
+			img.className = "poke_icon";
+
+			var name_coords_div = document.createElement("div");
+			name_coords_div.id = "name_coords_div";
+
+			// create a name span for the pokemon
+			var name_span = document.createElement("span");
+			name_span.innerHTML = curr_poke.name;
+			name_span.className = "poke_name_span";
+			name_span.style.color = rgb(r, g, b);
+
+			// create coordinate div with a "location icon" and "actual coordinate"
+			var coords_div = document.createElement("div");
+			var coords_span = document.createElement("span");
+			var location_icon = document.createElement("img");
+			location_icon.src = "location_icon.png";
+			location_icon.alt = "loc_icon";
+			location_icon.className = "loc_icon";
+			coords_div.appendChild(location_icon);
+			coords_span.innerHTML = curr_poke.coords;
+			coords_span.style.color = rgb(r, g, b);;
+			coords_div.appendChild(coords_span);
+			coords_span.className = "coords_span";
+
+			// appending process to create complete version of each poke div
+			// a complete version will have timer, poke's name, and poke's location
+			name_coords_div.appendChild(name_span);
+			name_coords_div.appendChild(coords_div);
+
+			var time = document.createElement("span");
+			time.id = "time_span";
+			time.innerHTML = "time";
+			time.style.color = rgb(r, g, b);
+
+			whole_poke_div.appendChild(img);
+			whole_poke_div.appendChild(name_coords_div);
+			whole_poke_div.appendChild(time);
+			//whole_poke_div.appendChild(coords_div);
+			result.appendChild(whole_poke_div);
+		}
+	}	
+}
+
+function rgb(r, b, g) {
+	return "rgb(" + r + ", " + g + ", " + b + ")";
 }
