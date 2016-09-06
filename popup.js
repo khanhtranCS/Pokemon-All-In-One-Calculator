@@ -4,6 +4,7 @@ window.onload = function() {
 	document.getElementById("cp_button").onclick = setVisible;
 	document.getElementById("snipe_button").onclick = setVisible;
 	document.getElementById("iv_button").onclick = setVisible;
+	processSnipe();
 }
 
 function setVisible() {
@@ -94,5 +95,11 @@ function getCP() {
 			//document.getElementById("display").innerHTML = resultDiv.getElementsByClassName("table evolvetable")[0].outerHTML;
 		});
 	}
+}
 
+function processSnipe() {
+	chrome.runtime.sendMessage({type: "poke_snipe"},
+		function(response) {
+			console.log(response.msg);
+		});
 }

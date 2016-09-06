@@ -1,10 +1,9 @@
 var resultHTML = "";
+var JSON_string = "";
+requestPokeLoc();
 
-startListen();
-
-function startListen() {
-	chrome.runtime.onMessage.addListener(
-		function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(
+	function(request, sender, sendResponse) {
 			// console.log("message recieved!!!");
 			// if (request.method == "getName") {
 			// 	alert("getheare!!!");
@@ -24,19 +23,26 @@ function startListen() {
 			// 	//getName(sendResponse);
 			// }
 			if (request.type == "CPSearcher") {
-				poke_name = request.name;
-				poke_cp = request.cp;
-				poke_id = request.id;
+				var poke_name = request.name;
+				var poke_cp = request.cp;
+				var poke_id = request.id;
 				requestHTML(poke_name, poke_cp, poke_id);
 				if (resultHTML != "") {
 					sendResponse({msg: resultHTML});
 					// resert the html after sent successfully
-					//resultHTML = "";
+					resultHTML = "";
 				}
-			} else if
+			} else if (request.type == "poke_snipe") {
+				console.log("newest json_String " + JSON_string);
+				if (JSON_string != "") {
+					sendResponse({msg: JSON_string});
+				} else {
+					alert("shjt !!!");
+				}
+			}
 		}
-	);
-}
+);
+
 
 function requestHTML(poke_name, poke_cp, poke_id) {
 	//console.log("poke cp is: " + poke_cp);
@@ -57,7 +63,20 @@ function processInfo() {
 	resultHTML = this.responseText;
 }
 
-// function alertInfo() {
-
-// 	console.log("current " + this.responseText);
+// function ajax_evolver() {
+// 	return $.ajax({})
 // }
+
+function requestPokeLoc() {
+	$.getJSON("http://pokesnipers.com/api/v1/pokemon.json", function(data) {
+		console.log(data);
+		console.log(JSON.stringify(data));
+		JSON_string = JSON.stringify(data);
+		console.log("this is json_string" + JSON_string);
+	}).done(function() {
+		JSON_string = JSON.stringify(data);
+		console.log("sucess fetch");
+	}).fail(function() {
+		console.log("error");
+	});
+}
