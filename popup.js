@@ -44,18 +44,18 @@ function getCP() {
 	if (poke_cp == "") {
 		alert("please input poke cp");
 	} else {
-		chrome.runtime.sendMessage({type: "CPSearcher",name: poke_name, cp: poke_cp, id: poke_id}, 
-		function(response) {
-			//console.log(response.msg);
+		chrome.runtime.sendMessage({type: "CPSearcher",name: poke_name, cp: poke_cp, id: poke_id});
+	}
+}
+
+chrome.runtime.onMessage.addListener(
+	function(request, sender, sendReponse) {
+		if(request.type == "poke_evolve") {
 			var resultDiv = document.createElement("div");
-			// if response is undefined, call getCP again, so that user need not to click the button again
-			if (response == undefined) {
-				console.log("response is not defined");
-			}
 			document.getElementById("status").style.display = "none";
-			resultDiv.innerHTML = response.msg;
+			resultDiv.innerHTML = request.msg;
 			var lst_evolve = resultDiv.getElementsByClassName("table evolvetable")[0].getElementsByClassName("evolverow");
-			//console.log(lst_evolve.length);
+
 			var result_table = document.getElementById("result");
 			var row_cp_name = document.createElement("tr");
 			var row_name = document.createElement("td");
@@ -89,11 +89,9 @@ function getCP() {
 
 			}
 			document.getElementById("result").style.display = "inline-block";
-			//console.log(resultDiv.getElementsByClassName("table evolvetable")[0].getElementsByClassName("evolverow")[0].outerHTML);
-			//document.getElementById("display").innerHTML = resultDiv.getElementsByClassName("table evolvetable")[0].outerHTML;
-		});
-	}
-}
+			sendReponse("popup recieved data!!!");
+		}
+});
 
 function processSnipe() {
 	chrome.runtime.sendMessage({type: "poke_snipe"},

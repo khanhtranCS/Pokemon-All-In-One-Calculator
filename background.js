@@ -28,7 +28,7 @@ chrome.runtime.onMessage.addListener(
 				var poke_cp = request.cp;
 				var poke_id = request.id;
 				requestData(poke_name, poke_cp, poke_id, function() {
-					sendEvolveResult(sendResponse);
+					sendEvolveResult();
 				});
 				// requestHTML(poke_name, poke_cp, poke_id);
 				// if (resultHTML != "") {
@@ -50,7 +50,7 @@ chrome.runtime.onMessage.addListener(
 function sendEvolveResult(sendResponse) {
 	console.log("callback function is called with data of " + resultHTML);
 	if (resultHTML != ""){
-		resp({msg: resultHTML});
+		chrome.runtime.sendMessage({type: "poke_evolve", msg: resultHTML});
 	}
 
 }

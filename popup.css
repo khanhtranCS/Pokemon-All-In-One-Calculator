@@ -58,8 +58,6 @@ td {
 
 body {
 	width: 250px;
-	background-image: url("128.png");
-	background-repeat: repeat-x repeat-y;
 }
 
 #cp_input {
