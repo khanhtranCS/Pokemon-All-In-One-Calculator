@@ -4,7 +4,8 @@ window.onload = function() {
 	document.getElementById("cp_button").onclick = setVisible;
 	document.getElementById("snipe_button").onclick = setVisible;
 	document.getElementById("iv_button").onclick = setVisible;
-	var timer = setInterval(processSnipe, 1000);
+	// var timer = setInterval(processSnipe, 1000);
+	document.getElementById("refresh_btn").onclick = processSnipe;
 }
 
 function setVisible() {
@@ -190,6 +191,8 @@ function getTimeLeft(curr_time, src_time) {
 	if (curr_hour == src_hour) {
 		console.log("current minutes " + curr_minutes);
 		console.log("src minutes " + src_minutes);
+		console.log("current hour " + curr_hour);
+		console.log("src hour " + src_hour);
 		var time_left = src_minutes - curr_minutes;
 		if (time_left == 0) {
 			time_type = " Seconds left"

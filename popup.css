@@ -10,8 +10,12 @@ td {
 	padding-left: 5px;
 }
 
+#snipe {
+	text-align: center;
+}
+
 #snipe_result {
-	padding-top: 30px;
+	padding-top: 10px;
 }
 
 .poke_icon {
@@ -26,8 +30,13 @@ td {
 	height: 10px;
 }
 
+#refresh_btn {
+	margin-top: 10px;
+}
+
 .whole_poke_div {
 	margin: 5px;
+	text-align: left;
 }
 
 .name_coords_div {
@@ -49,6 +58,8 @@ td {
 
 body {
 	width: 250px;
+	background-image: url("128.png");
+	background-repeat: repeat-x repeat-y;
 }
 
 #cp_input {
@@ -77,10 +88,20 @@ h6 {
 	display: none;
 }
 
-#cp_button, #snipe_button, #iv_button {
+.panel_btn {
 	padding: 5px;
 	border: 1px solid green;
 	float:left;
+	border-radius: 15px;
+	background-color: green;
+	font-style: bold;
+	margin-right: 3px;
+	opacity: 0.8;
+	box-shadow: 1px 4px 2px 2px;
+}
+
+.panel_btn:hover {
+	background-color: yellow;
 }
 
 #all_button {
