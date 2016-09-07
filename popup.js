@@ -49,11 +49,8 @@ function getCP() {
 			//console.log(response.msg);
 			var resultDiv = document.createElement("div");
 			// if response is undefined, call getCP again, so that user need not to click the button again
-			if (response == undefined || !success) {
-				document.getElementById("result").style.display = "none";
-				document.getElementById("status").style.display = "block";
-				getCP();
-				return;
+			if (response == undefined) {
+				console.log("response is not defined");
 			}
 			document.getElementById("status").style.display = "none";
 			resultDiv.innerHTML = response.msg;
