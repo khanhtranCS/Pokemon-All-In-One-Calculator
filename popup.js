@@ -4,7 +4,7 @@ window.onload = function() {
 	document.getElementById("cp_button").onclick = setVisible;
 	document.getElementById("snipe_button").onclick = setVisible;
 	document.getElementById("iv_button").onclick = setVisible;
-	processSnipe();
+	var timer = setInterval(processSnipe, 1000);
 }
 
 function setVisible() {
@@ -107,6 +107,7 @@ function processSnipe() {
 function display_snipe_info(poke_locations) {
 	lst_locations = poke_locations.results;
 	var result = document.getElementById("snipe_result");
+	result.innerHTML = "";
 	for (var i = 0; i < lst_locations.length; i++) {
 		var curr_poke = lst_locations[i];
 		if (curr_poke.rarity == "rare" || curr_poke.rarity == "very_rare"
@@ -160,7 +161,12 @@ function display_snipe_info(poke_locations) {
 
 			var time = document.createElement("span");
 			time.id = "time_span";
-			time.innerHTML = "time";
+
+			// retrive time left from current time and source time (provided by API)
+			var curr_time = new Date();
+			var src_time = new Date(curr_poke.until);
+			var time_left = getTimeLeft (curr_time, src_time);
+			time.innerHTML = time_left;
 			time.style.color = rgb(r, g, b);
 
 			whole_poke_div.appendChild(img);
@@ -171,6 +177,36 @@ function display_snipe_info(poke_locations) {
 		}
 	}	
 }
+
+function getTimeLeft(curr_time, src_time) {
+	var curr_hour = parseInt(curr_time.getHours());
+	var src_hour = parseInt(curr_time.getHours());
+	var curr_minutes = parseInt(curr_time.getMinutes());
+	var src_minutes = parseInt(src_time.getMinutes());
+	var curr_sec = parseInt(curr_time.getSeconds());
+	var src_sec = parseInt(src_time.getSeconds());
+	var time_type = " Minutes left";
+
+	if (curr_hour == src_hour) {
+		console.log("current minutes " + curr_minutes);
+		console.log("src minutes " + src_minutes);
+		var time_left = src_minutes - curr_minutes;
+		if (time_left == 0) {
+			time_type = " Seconds left"
+			time_left = (src_sec - curr_sec);
+			if (time_left <= 0) {
+				return "Disappeared";
+			}
+		}
+	} else if (src_hour > curr_hour) {
+		var time_left = src_minutes + (60 - curr_minutes);
+
+	}
+
+	return time_left + time_type;
+
+}
+
 
 function rgb(r, b, g) {
 	return "rgb(" + r + ", " + g + ", " + b + ")";
