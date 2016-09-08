@@ -33,7 +33,7 @@ function setVisibleByType(cp, iv, snipe) {
 }
 
 function getCP() {
-	console.log("getCP is called");
+	// console.log("getCP is called");
 	document.getElementById("result").style.display = "none";
 	document.getElementById("result").innerHTML = "";
 	var poke_cp = document.getElementById("cp_input").value;
@@ -42,8 +42,8 @@ function getCP() {
 	//console.log("poke_name is " + poke_name);
 	var poke_id = document.getElementById("op_animal").value;
 	//console.log("poke_id is " + poke_id);
-	if (poke_cp == "") {
-		alert("please input poke cp");
+	if (poke_cp == "" || !Number.isInteger(parseInt(poke_cp))) {
+		document.getElementById("result").innerHTML = "Please Input correct CP";
 	} else {
 		chrome.runtime.sendMessage({type: "CPSearcher",name: poke_name, cp: poke_cp, id: poke_id});
 	}
@@ -145,8 +145,17 @@ function display_snipe_info(poke_locations) {
 			location_icon.src = "location_icon.png";
 			location_icon.alt = "loc_icon";
 			location_icon.className = "loc_icon";
+			// create pokesniper2 redirectlink
+			var snipe_icon = document.createElement("img");
+			var poke2_link = document.createElement("a");
+			poke2_link.href = "pokesniper2://" + curr_poke.name + "/" + curr_poke.coords;
+			snipe_icon.src = "crosshair.png";
+			snipe_icon.alt = "crosshair";
+			snipe_icon.className = "snipe_icon";
+			poke2_link.appendChild(snipe_icon);
 			coords_div.appendChild(location_icon);
 			coords_span.innerHTML = curr_poke.coords;
+			coords_span.appendChild(poke2_link);
 			coords_span.style.color = rgb(r, g, b);;
 			coords_div.appendChild(coords_span);
 			coords_span.className = "coords_span";

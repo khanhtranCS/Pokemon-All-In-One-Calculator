@@ -25,9 +25,15 @@ td {
 	margin-right: 5px;
 }
 
-.loc_icon {
+.loc_icon{
 	width: 10px;
 	height: 10px;
+}
+
+.snipe_icon {
+	width: 15px;
+	height: 15px;
+	float:right;
 }
 
 #refresh_btn {
@@ -118,4 +124,9 @@ h6 {
 
 .iv_field {
 	width: 50px;
+}
+
+#poke_select {
+	text-align: center;
+	margin-top: 15px;
 }
