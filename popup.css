@@ -14,6 +14,10 @@ td {
 	text-align: center;
 }
 
+#iv_cal_div {
+	text-align: center;
+}
+
 #snipe_result {
 	padding-top: 10px;
 }
@@ -94,6 +98,11 @@ h6 {
 	display: none;
 }
 
+#iv_cal {
+	text-align: center;
+	padding-top: 15px; 
+}
+
 .panel_btn {
 	padding: 5px;
 	border: 1px solid green;
@@ -126,7 +135,13 @@ h6 {
 	width: 50px;
 }
 
-#poke_select {
+
+#iv_input {
+	margin-top: 8px;
+	margin-bottom: 8px;
 	text-align: center;
-	margin-top: 15px;
+}
+
+.iv_span {
+	display: inline;
 }

@@ -27,7 +27,7 @@ chrome.runtime.onMessage.addListener(
 				var poke_name = request.name;
 				var poke_cp = request.cp;
 				var poke_id = request.id;
-				requestData(poke_name, poke_cp, poke_id, function() {
+				requestCPData(poke_name, poke_cp, poke_id, function() {
 					sendEvolveResult();
 				});
 				// requestHTML(poke_name, poke_cp, poke_id);
@@ -43,11 +43,18 @@ chrome.runtime.onMessage.addListener(
 				} else {
 					console.log("error!!!");
 				}
+			} else if (request.type = "IVCalculator") {
+				var poke_id = request.id;
+				var poke_cp = request.cp;
+				var poke_hp = request.hp;
+				var poke_dust = request.dust;
+
+
 			}
 		}
 );
 
-function sendEvolveResult(sendResponse) {
+function sendEvolveResult() {
 	console.log("callback function is called with data of " + resultHTML);
 	if (resultHTML != ""){
 		chrome.runtime.sendMessage({type: "poke_evolve", msg: resultHTML});
@@ -55,7 +62,11 @@ function sendEvolveResult(sendResponse) {
 
 }
 
-function requestData(poke_name, poke_cp, poke_id, callback) {
+function requestIVData(poke_id, poke_cp, poke_hp, poke_dust, callback) {
+	console.log('');
+}
+
+function requestCPData(poke_name, poke_cp, poke_id, callback) {
 	$.ajax({
 		url: "https://pokeassistant.com/main/evolver?utf8=%E2%9C%93&search_pokemon_name=" + poke_name +"&search_cp=" + poke_cp + "&search_pokemon_id=" + poke_id + "&locale=en&commit=Evolve",
 		dataType: "text",

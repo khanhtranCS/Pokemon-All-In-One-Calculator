@@ -13,7 +13,7 @@
 		<div id="snipe_button" class="panel_btn" value="snipe">Poke Sniper</div>
 	</div>
 	<div id="cp_cal">
-		<select id="op_animal">
+		<select id="op_animal_cp">
 			<option value="001">Bulbasaur</option>
 			<option value="002">Ivysaur</option>
 			<option value="003">Venusaur</option>
@@ -175,8 +175,7 @@
 		</div>
 	</div>
 	<div id="iv_cal">
-		<div id="poke_select">
-			<select id="op_animal">
+			<select id="op_animal_iv">
 				<option value="001">Bulbasaur</option>
 				<option value="002">Ivysaur</option>
 				<option value="003">Venusaur</option>
@@ -329,12 +328,15 @@
 				<option value="150">Mewtwo</option>
 				<option value="151">Mew</option>
 			</select>
-		</div>
 		<div id="iv_input">
-			<div id="cp_span" class="iv_span">CP <input type="text" name="cp" id="cp_field" class="iv_field" value="CP"></div>
+			<div id="cp_span" class="iv_span">CP <input type="text" name="cp" id="cp_field" class="iv_field"></div>
 			<div id="hp_span" class="iv_span">HP <input type="text" name="hp" id="hp_field" class="iv_field"></div>
 			<div id="dust_span" class="iv_span">Stardust <input type="text" name="stardust" id="dust_field" class="iv_field"></div>
 		</div>
+		<div id="iv_cal_div">
+			<button id="iv_cal_btn">Calculate</button>
+		</div>
+		<div id="iv_result"></div>
 	</div>
 	<div id="snipe">
 		<button id="refresh_btn">refresh</button>

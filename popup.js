@@ -4,6 +4,7 @@ window.onload = function() {
 	document.getElementById("cp_button").onclick = setVisible;
 	document.getElementById("snipe_button").onclick = setVisible;
 	document.getElementById("iv_button").onclick = setVisible;
+	document.getElementById("iv_cal_btn").onclick = getIVResult;
 	// var timer = setInterval(processSnipe, 1000);
 	processSnipe();
 	document.getElementById("refresh_btn").onclick = processSnipe;
@@ -34,13 +35,14 @@ function setVisibleByType(cp, iv, snipe) {
 
 function getCP() {
 	// console.log("getCP is called");
+	document.getElementById("status").style.display = "block";
 	document.getElementById("result").style.display = "none";
 	document.getElementById("result").innerHTML = "";
 	var poke_cp = document.getElementById("cp_input").value;
 	//console.log("current cp" + poke_cp);
-	var poke_name = document.getElementById("op_animal").textContent;
+	var poke_name = document.getElementById("op_animal_cp").textContent;
 	//console.log("poke_name is " + poke_name);
-	var poke_id = document.getElementById("op_animal").value;
+	var poke_id = document.getElementById("op_animal_cp").value;
 	//console.log("poke_id is " + poke_id);
 	if (poke_cp == "" || !Number.isInteger(parseInt(poke_cp))) {
 		document.getElementById("result").innerHTML = "Please Input correct CP";
@@ -49,11 +51,25 @@ function getCP() {
 	}
 }
 
+function getIVResult() {
+	//var poke_name = document.getElementById("op_animal_iv").text;
+	var poke_id = document.getElementById("op_animal_iv").value;
+	var poke_cp = parseInt(document.getElementById("cp_field").value);
+	var poke_hp = parseInt(document.getElementById("hp_field").value);
+	var poke_dust = parseInt(document.getElementById("dust_field").value);
+	if (poke_cp == "" || poke_hp == "" || poke_dust == ""
+		|| !Number.isInteger(poke_cp) || !Number.isInteger(poke_hp) || !Number.isInteger(poke_dust)) {
+		document.getElementById("iv_result").innerHTML = "Please input correct value";
+	} else {
+		chrome.runtime.sendMessage({type:"IVCalculator", id: poke_id, cp: poke_cp, hp: poke_hp, dust: poke_dust});
+	}
+}
+
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendReponse) {
 		if(request.type == "poke_evolve") {
 			var resultDiv = document.createElement("div");
-			document.getElementById("status").style.display = "none";
+			//document.getElementById("status").style.display = "block";
 			resultDiv.innerHTML = request.msg;
 			var lst_evolve = resultDiv.getElementsByClassName("table evolvetable")[0].getElementsByClassName("evolverow");
 
@@ -90,7 +106,7 @@ chrome.runtime.onMessage.addListener(
 
 			}
 			document.getElementById("result").style.display = "inline-block";
-			sendReponse("popup recieved data!!!");
+			document.getElementById("status").style.display = "none";
 		}
 });
 
