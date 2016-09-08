@@ -57,7 +57,8 @@ td {
 }
 
 body {
-	width: 250px;
+	width: 300px;
+	height: 30px;
 }
 
 #cp_input {
@@ -74,6 +75,7 @@ h6 {
 	text-align: center;
 	margin-top: 10px;
 }
+
 
 #cp_cal {
 	display: none;
@@ -98,10 +100,22 @@ h6 {
 	box-shadow: 1px 4px 2px 2px;
 }
 
-.panel_btn:hover {
+.panel_btn:hover{
 	background-color: yellow;
+	cursor: pointer;
+}
+#refresh_btn:hover, #evolve:hover{
+	cursor: pointer;
 }
 
 #all_button {
+	width: 250px;
+	height: 32px;
 	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.iv_field {
+	width: 50px;
 }
