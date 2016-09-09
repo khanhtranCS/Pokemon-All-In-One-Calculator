@@ -41,7 +41,7 @@ chrome.runtime.onMessage.addListener(
 				if (JSON_string != "") {
 					sendResponse({msg: JSON_string});
 				} else {
-					console.log("error!!!");
+					//console.log("error!!!");
 				}
 			} else if (request.type = "IVCalculator") {
 				//console.log("IVCalculator message recieved");
@@ -72,14 +72,22 @@ function sendIVResult() {
 }
 
 function requestIVData(poke_id, poke_cp, poke_hp, poke_dust, callback) {
-	var url_link = "https://pokemon.gameinfo.io/tools/iv-calculator?hl=en#"+poke_id+","+poke_cp+","+poke_hp+","+poke_dust;
-	console.log(url_link);
+	//console.log(url_link);
+	// fetch data from ****.php file**** through 'POST' method
+	var form = {
+			'search_cp': poke_cp,
+			'search_pokemon_name': "Dragonite",
+			'search_hp': poke_hp,
+			'search_dust': poke_dust,
+			'search_powered': "1"
+		};
 	$.ajax({
-		url: "https://pokemon.gameinfo.io/tools/iv-calculator?hl=en#WzE0OSxbWzIyMzgsMTIzLDMwMDBdXSwxLFswLDAsIiIsW11dLDBd",
-		dataType:"text",
+		type: 'POST',
+		url: "https://pokeassistant.com/main/ivcalculator",
+		dataType: "text",
+		data: form,
 		success: function (data) {
-			console.log("got here");
-			console.log("IV data " + data);
+			console.log(data);		
 		}
 	});
 }

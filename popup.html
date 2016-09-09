@@ -166,7 +166,7 @@
 			<option value="150">Mewtwo</option>
 			<option value="151">Mew</option>
 		</select>
-		<input type="text" name="cp" id="cp_input"/>
+		<input type="number" name="cp" pattern="[0-9]*" id="cp_input"/>
 		<h6 id="status">loading...</h6>
 		<table id="result"></table>
 		<br/>
@@ -330,9 +330,9 @@
 				<option value="151">Mew</option>
 			</select>
 		<div id="iv_input">
-			<div id="cp_span" class="iv_span">CP <input type="text" name="cp" id="cp_field" class="iv_field"></div>
-			<div id="hp_span" class="iv_span">HP <input type="text" name="hp" id="hp_field" class="iv_field"></div>
-			<div id="dust_span" class="iv_span">Stardust <input type="text" name="stardust" id="dust_field" class="iv_field"></div>
+			<div id="cp_span" class="iv_span">CP <input type="number" pattern="[0-9]*" name="cp" id="cp_field" class="iv_field"></div>
+			<div id="hp_span" class="iv_span">HP <input type="number" name="hp" pattern="[0-9]*" id="hp_field" class="iv_field"></div>
+			<div id="dust_span" class="iv_span">Stardust <input type="number" name="stardust" pattern="[0-9]*" id="dust_field" class="iv_field"></div>
 		</div>
 		<div id="iv_cal_div">
 			<button id="iv_cal_btn">Calculate</button>
