@@ -7,6 +7,6 @@ An All-in-One Pokemon tool (chrome extension) that will calculate cp, iv, and po
 - Snipe rare pokemon location around the world
 -----------------
 Update logs (v1.1):
-1. Fixed empty CP input that cause browser to freeze
-2. Added “snipe” icon, so that clients can use it for pokesniper2 software
-3. Added “loading…” notification for CP Calculator
+- Fixed empty CP input that cause browser to freeze
+- Added “snipe” icon, so that clients can use it for pokesniper2 software
+- Added “loading…” notification for CP Calculator
