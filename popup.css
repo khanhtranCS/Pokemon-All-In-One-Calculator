@@ -145,6 +145,10 @@ h6 {
 	text-align: center;
 }
 
+#result {
+	border:none;
+}
+
 .iv_span {
 	display: inline;
 }

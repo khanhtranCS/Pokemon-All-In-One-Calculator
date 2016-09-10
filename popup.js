@@ -191,13 +191,21 @@ function display_evolve_info(message) {
 				// possible involve value
 				//console.log("poke name is " + lst_td[0].textContent);
 				var td_name = document.createElement("td");
+				td_name.className = "stat_td";
 				// retrive pokemon's name, and put it into column div
 				td_name.innerHTML = lst_td[0].textContent.replace(/[0-9]/g, '');
 				var row_cp = lst_td[1].outerHTML;
-				console.log(td_name.outerHTML.html());
+				var td_div = document.createElement("div");
+				td_div.innerHTML = row_cp;
+				//console.log(td_div);
+				var possible_CPs = td_div.getElementsByTagName("td");
+				//console.log(possible_CPs);
+				var td_cp = document.createElement("td");
+				td_cp.className = "stat_td";
+				td_cp.appendChild(td_div);
 				//console.log(row_cp);
-				tr_el.innerHTML = td_name.outerHTML.html();
-				tr_el.innerHTML += row_cp;
+				tr_el.innerHTML = td_name.outerHTML;
+				tr_el.appendChild(td_cp);
 
 				result_table.appendChild(tr_el);
 				//console.log("second td" + td_value.outerHTML);
