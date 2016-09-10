@@ -1881,20 +1881,19 @@ function determinePerfection(ivs) {
 	return Math.floor(perfection * 100) / 100;
 }
 
-/**
- * Evaluate a given pokemon
- * @param {string|number} Pokemon Query (e.g. "2" or "Ivysaur")
- * @param {number} CP
- * @param {number} HP
- * @param {number} dustCost Dust cost of upgrading pokemon
- * @param {bool} neverUpgraded If you've never powered it up, fewer potential levels
+/** list @param
+ * @pokemonQuery  pokemon's id || name
+ * @cp amount of cp that current of pokemon
+ * @hp amount of hp that current of pokemon
+ * @dustCost StarDust amount that cost for pokemon upgrade
+ * @Upgraded_bool true if you upgraded, false otherwise
  */
-function evaluate (pokemonQuery, cp, hp, dustCost, neverUpgraded) {
+function evaluate (pokemonQuery, cp, hp, dustCost, Upgraded_bool) {
 	var pokemon = pokemonByName(pokemonQuery) || pokemonById(pokemonQuery);
 	if (!pokemon) {
 		return {error : `Could not find pokemon: ${pokemonQuery}`};
 	}
-	var potentialIVs = determinePossibleIVs(pokemon, cp, hp, dustCost, neverUpgraded);
+	var potentialIVs = determinePossibleIVs(pokemon, cp, hp, dustCost, Upgraded_bool);
 
 	$.each(potentialIVs, function (possibility) {
 		possibility.perfection = determinePerfection(possibility);
@@ -1915,12 +1914,16 @@ function evaluate (pokemonQuery, cp, hp, dustCost, neverUpgraded) {
 	return pokeSnapshot;
 }
 
-function determinePossibleIVs (pokemon, cp, hp, dust, neverUpgraded) {
+function determinePossibleIVs (pokemon, cp, hp, dust, Upgraded_bool) {
+  var maxSta = 15;
+  var maxDef = 15;
+  var maxAtk = 15;
+  var perfectIV = maxSta + maxDef + maxAtk;
 	var potentialLevels = levelsByDust(dust);
 	potentialLevels.sort(function (a, b) {
 		return a.level > b.level ? 1 : -1;//no dupes
 	});
-	if (neverUpgraded) {
+	if (!Upgraded_bool) {
 		potentialLevels = potentialLevels.filter(function (data) {
 			return data.level % 2 === 0;
 		});
@@ -1955,7 +1958,8 @@ function determinePossibleIVs (pokemon, cp, hp, dust, neverUpgraded) {
 				if (testCP(cp, attackIV, defenseIV, staminaIV, levelData, pokemon)) {
 					potentialIVs.push({
 						attackIV, defenseIV, staminaIV,
-						level : levelData.level
+						level : levelData.level,
+            perfection: Math.round((10*((attackIV + defenseIV + staminaIV) / perfectIV) * 100))/10 // round to nearest 10th
 					})
 				}
 			}
@@ -1971,14 +1975,14 @@ function determinePossibleIVs (pokemon, cp, hp, dust, neverUpgraded) {
  * @param {number} CP
  * @param {number} HP
  * @param {number} dustCost Dust cost of upgrading pokemon
- * @param {bool} neverUpgraded If you've never powered it up, fewer potential levels
+ * @param {bool} Upgraded_bool If you've never powered it up, fewer potential levels
  */
-function possibleIVs (pokemonQuery, cp, hp, dust, neverUpgraded) {
+function possibleIVs (pokemonQuery, cp, hp, dust, Upgraded_bool) {
 	var pokemon = pokemonByName(pokemonQuery) || pokemonById(pokemonQuery);
 	if (!pokemon) {
 		return {error:`Could not find pokemon: ${pokemonQuery}`};
 	}
-	var ivs = determinePossibleIVs(pokemon, cp, hp, dustCost, neverUpgraded);
+	var ivs = determinePossibleIVs(pokemon, cp, hp, dustCost, Upgraded_bool);
 	if (!ivs.length) {
 		return {error: `Could not find any IVs matching given information`};
 	}
@@ -1986,5 +1990,5 @@ function possibleIVs (pokemonQuery, cp, hp, dust, neverUpgraded) {
 }
 
 
-var result = evaluate('Snorlax', 957, 144, 1300, false);
+var result = evaluate('Dragonite', 2238, 123, 3000, true);
 console.log(result); 
