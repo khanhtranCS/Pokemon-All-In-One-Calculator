@@ -148,3 +148,61 @@ h6 {
 .iv_span {
 	display: inline;
 }
+
+#powered_bool {
+	margin-top: 8px;
+}
+
+.select_placeholder {
+	opacity: 0.5;
+}
+
+#iv_result {
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+#iv_table {
+	border-collapse: collapse;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#perf_range, #num_possible, #avg_range {
+	color: #848484;
+	margin-bottom: 0px;
+}
+
+#perf_range_div, #avg_range_div {
+	font-style: bold;
+	font-size: 30px;
+}
+
+#avg_range_div {
+	margin-bottom: 14.940px;
+}
+
+#perf_range_div {
+	color: #a4e495;
+}
+
+#avg_range_div {
+	color: #4ebe88;
+}
+
+.title_td, .stat_td {
+	font-size: 1.5em;
+	border:none;
+}
+
+.title_td {
+	color:white;
+	background-color: #a4e495;
+}
+
+#poke_png {
+	width: 50px;
+	height: 50px;
+	margin-bottom: 5px;
+	margin-top: 15px;
+}

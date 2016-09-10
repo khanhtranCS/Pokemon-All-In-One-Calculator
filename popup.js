@@ -27,13 +27,13 @@ function setVisible() {
  * @para string that represent either block or none
  * which will be used for interactive display
  */
-function setVisibleByType(cp, iv, snipe) {
-	document.getElementById("cp_cal").style.display = cp;
-	document.getElementById("iv_cal").style.display = iv;
-	document.getElementById("snipe").style.display = snipe;
-}
+ function setVisibleByType(cp, iv, snipe) {
+ 	document.getElementById("cp_cal").style.display = cp;
+ 	document.getElementById("iv_cal").style.display = iv;
+ 	document.getElementById("snipe").style.display = snipe;
+ }
 
-function getCP() {
+ function getCP() {
 	// console.log("getCP is called");
 	document.getElementById("status").style.display = "block";
 	document.getElementById("result").style.display = "none";
@@ -57,28 +57,128 @@ function getIVResult() {
 	var poke_cp = parseInt(document.getElementById("cp_field").value);
 	var poke_hp = parseInt(document.getElementById("hp_field").value);
 	var poke_dust = parseInt(document.getElementById("dust_field").value);
+	var poke_powered_bool = document.getElementById("powered_bool").value;
 	if (poke_cp == "" || poke_hp == "" || poke_dust == ""
 		|| !Number.isInteger(poke_cp) || !Number.isInteger(poke_hp) || !Number.isInteger(poke_dust)) {
 		document.getElementById("iv_result").innerHTML = "Please input correct value";
-	} else {
-		chrome.runtime.sendMessage({type:"IVCalculator", id: poke_id, cp: poke_cp, hp: poke_hp, dust: poke_dust});
+} else {
+	chrome.runtime.sendMessage({type:"IVCalculator", id: poke_id, cp: poke_cp, hp: poke_hp, dust: poke_dust, powered_bool: poke_powered_bool},
+		function(response) {
+			if (response == undefined) {
+				response == "";
+				display_iv_info(response);
+			} else {
+				display_iv_info(JSON.parse(response.msg), poke_id);
+			}
+		});
+}
+}
+
+function appendChildNode(parent_node,arr_obj) {
+	if (arr_obj.type == "intro_result") {
+		for (var i = 0; i < arr_obj.arr.length; i++) {
+			parent_node.appendChild(arr_obj.arr[i]);
+		}
+	} else if (arr_obj.type == "table_result") {
+		for (var i = 0; i < arr_obj.arr.length; i++) {
+			var col = document.createElement("td");
+			col.innerHTML = arr_obj.arr[i];
+			col.className = arr_obj.className;
+			parent_node.appendChild(col);
+		}
 	}
+}
+
+function display_iv_info(response, poke_id) {
+	document.getElementById("iv_result").innerHTML = "";
+	var result_area = document.getElementById("iv_result");
+	var poke_icon = document.createElement("img");
+	poke_icon.id = "poke_png";
+	poke_icon.alt = "pokemon";
+	poke_icon.src = "https://s3-eu-west-1.amazonaws.com/pokesnipers/custom_images/" + poke_id + ".png";
+	result_area.appendChild(poke_icon);
+	if(response == "" || response.ivs.length == 0) {
+		result_area.innerHTML = "No Possible IVs Combination Found!!!";
+	} else {
+		var num_possible = document.createElement("h2");
+		num_possible.id = "num_possible";
+		var perf_range = document.createElement("h2");
+		perf_range.id = "perf_range";
+		perf_range.innerHTML = "Perfect Range";
+		var perf_range_div = document.createElement("div");
+		perf_range_div.id = "perf_range_div";
+		var avg_range = document.createElement("h2");
+		avg_range.id = "avg_range";
+		avg_range.innerHTML = "Average Range";
+		avg_range_div = document.createElement("div");
+		avg_range_div.id = "avg_range_div";
+
+		var arr_obj = {type:"intro_result", arr: [num_possible, perf_range, perf_range_div, avg_range, avg_range_div]};
+		appendChildNode(result_area, arr_obj);
+
+		var result_table = document.createElement("table");
+		result_table.id = "iv_table";
+		var info_row = document.createElement("tr");
+
+		arr_obj = {type:"table_result", arr:["Level", "Atk", "Def", "Stam", "Perfection"], className: "title_td"};
+		appendChildNode(result_table, arr_obj);
+
+		result_table.appendChild(info_row);
+
+		//console.log(response);
+		var possible_ivs = response.ivs;
+		var perf_lst = [];
+		var length_ivs = possible_ivs.length;
+		for (var i = 0; i < possible_ivs.length; i++) {
+			var curr_poke = possible_ivs[i];
+			var atk_IV = curr_poke.atkIV;
+			var def_IV = curr_poke.defIV;
+			var sta_IV = curr_poke.staIV;
+			var level = curr_poke.level;
+			var perf_rate = curr_poke.perfection;
+			perf_lst.push(perf_rate);
+			var stat_row = document.createElement("tr");
+			var arr_obj = {type:"table_result", arr:[level, atk_IV, def_IV, sta_IV, perf_rate + "%"], className: "stat_td"};
+			appendChildNode(stat_row, arr_obj);
+			result_table.appendChild(stat_row);
+		}
+		result_area.appendChild(result_table);
+		num_possible.innerHTML = length_ivs + " Possible IVs Combination";
+		perf_range_div.innerHTML = Math.min(perf_lst) + "% - " + Math.max(perf_lst) + "%";
+		avg_range_div.innerHTML = getAverage(perf_lst) + "%";
+	}
+}
+
+function getAverage(arr) {
+	var total = 0;
+	var arr_length = arr.length;
+	for(var i = 0; i < arr_length; i++) {
+		total += arr[i];
+	}
+	return total/arr_length;
 }
 
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendReponse) {
 		if(request.type == "poke_evolve") {
-			var resultDiv = document.createElement("div");
+			display_evolve_info(request.msg);
+		}
+	});
+
+function display_evolve_info(message) {
+	var resultDiv = document.createElement("div");
 			//document.getElementById("status").style.display = "block";
-			resultDiv.innerHTML = request.msg;
+			resultDiv.innerHTML = message;
 			var lst_evolve = resultDiv.getElementsByClassName("table evolvetable")[0].getElementsByClassName("evolverow");
 
 			var result_table = document.getElementById("result");
 			var row_cp_name = document.createElement("tr");
 			var row_name = document.createElement("td");
 			row_name.innerHTML = "Name";
+			row_name.className = "title_td";
 			var row_cp = document.createElement("td")
 			row_cp.innerHTML = "CP";
+			row_cp.className = "title_td";
 			row_cp_name.appendChild(row_name);
 			row_cp_name.appendChild(row_cp);
 			result_table.appendChild(row_cp_name);
@@ -87,14 +187,16 @@ chrome.runtime.onMessage.addListener(
 				//console.log("iter: " + i);
 				// first td of tr, which contain poke name
 				var lst_td = lst_evolve[i].getElementsByTagName("td");
+
 				// possible involve value
 				//console.log("poke name is " + lst_td[0].textContent);
 				var td_name = document.createElement("td");
 				// retrive pokemon's name, and put it into column div
 				td_name.innerHTML = lst_td[0].textContent.replace(/[0-9]/g, '');
 				var row_cp = lst_td[1].outerHTML;
+				console.log(td_name.outerHTML.html());
 				//console.log(row_cp);
-				tr_el.innerHTML = td_name.outerHTML;
+				tr_el.innerHTML = td_name.outerHTML.html();
 				tr_el.innerHTML += row_cp;
 
 				result_table.appendChild(tr_el);
@@ -108,29 +210,28 @@ chrome.runtime.onMessage.addListener(
 			document.getElementById("result").style.display = "inline-block";
 			document.getElementById("status").style.display = "none";
 		}
-});
 
-function processSnipe() {
-	chrome.runtime.sendMessage({type: "poke_snipe"},
-		function(response) {
-			display_snipe_info(JSON.parse(response.msg));
-		});
-}
+		function processSnipe() {
+			chrome.runtime.sendMessage({type: "poke_snipe"},
+				function(response) {
+					display_snipe_info(JSON.parse(response.msg));
+				});
+		}
 
-function display_snipe_info(poke_locations) {
-	lst_locations = poke_locations.results;
-	var result = document.getElementById("snipe_result");
-	result.innerHTML = "";
-	for (var i = 0; i < lst_locations.length; i++) {
-		var curr_poke = lst_locations[i];
-		if (curr_poke.rarity == "rare" || curr_poke.rarity == "very_rare"
-				|| curr_poke.rarity == "special" || curr_poke.rarity == "legendary") {
+		function display_snipe_info(poke_locations) {
+			lst_locations = poke_locations.results;
+			var result = document.getElementById("snipe_result");
+			result.innerHTML = "";
+			for (var i = 0; i < lst_locations.length; i++) {
+				var curr_poke = lst_locations[i];
+				if (curr_poke.rarity == "rare" || curr_poke.rarity == "very_rare"
+					|| curr_poke.rarity == "special" || curr_poke.rarity == "legendary") {
 
 			// create random color
-			var r = Math.round(Math.random() * 256);
-			var g = Math.round(Math.random() * 256);
-			var b = Math.round(Math.random() * 256);
-			
+		var r = Math.round(Math.random() * 256);
+		var g = Math.round(Math.random() * 256);
+		var b = Math.round(Math.random() * 256);
+
 			// create rbg(r,b,g) color in string representative
 			//var rbg_color = "rbg(" + r + ", " + b + ", " + g + ")";
 			

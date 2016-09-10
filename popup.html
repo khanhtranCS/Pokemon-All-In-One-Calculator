@@ -14,7 +14,7 @@
 	</div>
 	<div id="cp_cal">
 		<select id="op_animal_cp">
-			<option></option>
+			<option value="000" class="select_placeholder">Select Pokemon</option>
 			<option value="001">Bulbasaur</option>
 			<option value="002">Ivysaur</option>
 			<option value="003">Venusaur</option>
@@ -176,9 +176,8 @@
 		</div>
 	</div>
 	<div id="iv_cal">
-			<h3>Coming Soon!!!</h3>
 			<select id="op_animal_iv">
-				<option></option>
+				<option value="000" class="select_placeholder">Select Pokemon</option>
 				<option value="001">Bulbasaur</option>
 				<option value="002">Ivysaur</option>
 				<option value="003">Venusaur</option>
@@ -334,7 +333,37 @@
 		<div id="iv_input">
 			<div id="cp_span" class="iv_span"><input type="number" pattern="[0-9]*" placeholder="Enter HP" name="cp" id="cp_field" class="iv_field"></div>
 			<div id="hp_span" class="iv_span"><input type="number" name="hp" pattern="[0-9]*" placeholder="Enter HP" id="hp_field" class="iv_field"></div>
-			<div id="dust_span" class="iv_span"><input type="number" name="stardust" pattern="[0-9]*" placeholder="Enter Stardust" id="dust_field" class="iv_field"></div>
+			<div id="dust_span" class="iv_span">
+			<select id="dust_field" class="iv_field">
+				<option value="200">200</option>
+				<option value="400">400</option>
+				<option value="600">600</option>
+				<option value="800">800</option>
+				<option value="1000">1000</option>
+				<option value="1300">1300</option>
+				<option value="1600">1600</option>
+				<option value="1900">1900</option>
+				<option value="2200">2200</option>
+				<option value="2500">2500</option>
+				<option value="3000">3000</option>
+				<option value="3500">3500</option>
+				<option value="4000">4000</option>
+				<option value="4500">4500</option>
+				<option value="5000">5000</option>
+				<option value="6000">6000</option>
+				<option value="7000">7000</option>
+				<option value="8000">8000</option>
+				<option value="9000">9000</option>
+				<option value="10000">10000</option>
+			</select>
+			</div>
+			<div id="powered_span" class="iv_span">
+				<select id="powered_bool">
+					<option value="false">Have You Powered Up?</option>
+					<option value="true">Yes</option>
+					<option value="false">No</option>
+				</select>
+			</div>
 		</div>
 		<div id="iv_cal_div">
 			<button id="iv_cal_btn">Calculate</button>

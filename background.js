@@ -50,14 +50,19 @@ chrome.runtime.onMessage.addListener(
 				var poke_cp = request.cp;
 				var poke_hp = request.hp;
 				var poke_dust = request.dust;
+        var poke_powered_bool = request.powered_bool;
 
-				requestIVData(poke_id, poke_cp, poke_hp, poke_dust, function() {
-					sendIVResult();
-				});
 
+        var result = evaluate(poke_id, poke_cp, poke_hp, poke_dust, poke_powered_bool);
+
+        sendResponse({msg: JSON.stringify(result)});;
 			}
 		}
 );
+
+function sendIVsResult(result) {
+  chrome.runtime.sendMessage({type: "iv_results", msg:JSON.stringify(result)});
+}
 
 // callback function for sending data of CP Calculator that being fetched
 function sendEvolveResult() {
@@ -67,32 +72,6 @@ function sendEvolveResult() {
 	}
 
 }
-
-function sendIVResult() {
-	chrome.runtime.sendMessage({type: "iv_cal_result"});
-}
-
-function requestIVData(poke_id, poke_cp, poke_hp, poke_dust, callback) {
-	//console.log(url_link);
-	// fetch data from ****.php file**** through 'POST' method
-	var form = {
-			'cp': poke_cp,
-			'pokemon': poke_id,
-			'hp': poke_hp,
-			'dust': poke_dust,
-			'up': "1"
-		};
-	$.ajax({
-		type: 'POST',
-		url: "https://pokemon.gameinfo.io/tools/iv-calculator?hl=en",
-		dataType: "text",
-		data: form,
-		success: function (data) {
-			console.log(data);		
-		}
-	});
-}
-
 
 
 function requestCPData(poke_name, poke_cp, poke_id, callback) {
@@ -1868,16 +1847,16 @@ function testHP(hp, iv, levelData, pokemon) {
 	return hp == parseInt(Math.floor((pokemon.stamina + iv) * levelData.cpScalar), 10);
 }
 
-function testCP(cp, attackIV, defenseIV, staminaIV, levelData, pokemon) {
-	var attackFactor = pokemon.attack + attackIV;
-	var defenseFactor = Math.pow(pokemon.defense + defenseIV, 0.5)
-	var staminaFactor = Math.pow((pokemon.stamina + staminaIV), 0.5);
+function testCP(cp, atkIV, defIV, staIV, levelData, pokemon) {
+	var attackFactor = pokemon.attack + atkIV;
+	var defenseFactor = Math.pow(pokemon.defense + defIV, 0.5)
+	var staminaFactor = Math.pow((pokemon.stamina + staIV), 0.5);
 	var scalarFactor = Math.pow(levelData.cpScalar, 2);
 	return cp == parseInt(attackFactor * defenseFactor * staminaFactor * scalarFactor / 10, 10);
 }
 
 function determinePerfection(ivs) {
-	var perfection = (ivs.attackIV + ivs.defenseIV + ivs.staminaIV) / 45
+	var perfection = (ivs.atkIV + ivs.defIV + ivs.staIV) / 45
 	return Math.floor(perfection * 100) / 100;
 }
 
@@ -1929,7 +1908,7 @@ function determinePossibleIVs (pokemon, cp, hp, dust, Upgraded_bool) {
 		});
 	}
 
-	var staminaIV, attackIV, defenseIV;
+	var staIV, atkIV, defIV;
 	var potentialHPIVs = [];
 
 	var levelIndex;
@@ -1937,11 +1916,11 @@ function determinePossibleIVs (pokemon, cp, hp, dust, Upgraded_bool) {
 	for (levelIndex = 0; levelIndex < potentialLevels.length; levelIndex++) {
 		levelData = potentialLevels[levelIndex];
 
-		for (staminaIV = 0; staminaIV <= 15; staminaIV++) {
-			if (testHP(hp, staminaIV, levelData, pokemon)) {
+		for (staIV = 0; staIV <= 15; staIV++) {
+			if (testHP(hp, staIV, levelData, pokemon)) {
 				potentialHPIVs.push({
 					levelData,
-					iv : staminaIV
+					iv : staIV
 				});
 			}
 		}
@@ -1951,15 +1930,16 @@ function determinePossibleIVs (pokemon, cp, hp, dust, Upgraded_bool) {
 	var hpIVIndex;
 	var potentialIVs = [];
 	for (hpIVIndex = 0; hpIVIndex < potentialHPIVs.length; hpIVIndex++) {
-		staminaIV = potentialHPIVs[hpIVIndex].iv;
+		staIV = potentialHPIVs[hpIVIndex].iv;
 		levelData = potentialHPIVs[hpIVIndex].levelData;
-		for (attackIV = 0; attackIV <= 15; attackIV++) {
-			for (defenseIV = 0; defenseIV <= 15; defenseIV++) {
-				if (testCP(cp, attackIV, defenseIV, staminaIV, levelData, pokemon)) {
+		for (atkIV = 0; atkIV <= 15; atkIV++) {
+			for (defIV = 0; defIV <= 15; defIV++) {
+				if (testCP(cp, atkIV, defIV, staIV, levelData, pokemon)) {
 					potentialIVs.push({
-						attackIV, defenseIV, staminaIV,
+						atkIV, defIV, staIV,
 						level : levelData.level,
-            perfection: Math.round((10*((attackIV + defenseIV + staminaIV) / perfectIV) * 100))/10 // round to nearest 10th
+            perfection: Math.round((10*((atkIV + defIV + staIV) / perfectIV) * 100))/10, // round to nearest 10th
+            poke: pokemon
 					})
 				}
 			}
@@ -1969,13 +1949,12 @@ function determinePossibleIVs (pokemon, cp, hp, dust, Upgraded_bool) {
 	return potentialIVs;
 }
 
-/**
- * Determine possible IVs for a given pokemon
- * @param {string|number} Pokemon Query (e.g. "2" or "Ivysaur")
- * @param {number} CP
- * @param {number} HP
- * @param {number} dustCost Dust cost of upgrading pokemon
- * @param {bool} Upgraded_bool If you've never powered it up, fewer potential levels
+/** list parameters
+ * @pokemonQuery  pokemon's id || name
+ * @cp amount of cp that current of pokemon
+ * @hp amount of hp that current of pokemon
+ * @dustCost StarDust amount that cost for pokemon upgrade
+ * @Upgraded_bool true if you upgraded, false otherwise
  */
 function possibleIVs (pokemonQuery, cp, hp, dust, Upgraded_bool) {
 	var pokemon = pokemonByName(pokemonQuery) || pokemonById(pokemonQuery);
@@ -1988,7 +1967,3 @@ function possibleIVs (pokemonQuery, cp, hp, dust, Upgraded_bool) {
 	}
 	return {ivs};
 }
-
-
-var result = evaluate('Dragonite', 2238, 123, 3000, true);
-console.log(result); 
