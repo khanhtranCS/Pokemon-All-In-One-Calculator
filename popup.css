@@ -72,7 +72,7 @@ body {
 }
 
 #cp_input {
-	width: 45px;
+	width: 60px;
 }
 
 h6 {
@@ -132,7 +132,10 @@ h6 {
 }
 
 .iv_field {
-	width: 50px;
+	width: 60px;
+}
+#dust_field {
+	width: 90px;
 }
 
 

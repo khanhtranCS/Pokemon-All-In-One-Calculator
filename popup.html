@@ -14,6 +14,7 @@
 	</div>
 	<div id="cp_cal">
 		<select id="op_animal_cp">
+			<option></option>
 			<option value="001">Bulbasaur</option>
 			<option value="002">Ivysaur</option>
 			<option value="003">Venusaur</option>
@@ -166,7 +167,7 @@
 			<option value="150">Mewtwo</option>
 			<option value="151">Mew</option>
 		</select>
-		<input type="number" name="cp" pattern="[0-9]*" id="cp_input"/>
+		<input type="number" name="cp" placeholder="Enter CP" pattern="[0-9]*" id="cp_input"/>
 		<h6 id="status">loading...</h6>
 		<table id="result"></table>
 		<br/>
@@ -177,6 +178,7 @@
 	<div id="iv_cal">
 			<h3>Coming Soon!!!</h3>
 			<select id="op_animal_iv">
+				<option></option>
 				<option value="001">Bulbasaur</option>
 				<option value="002">Ivysaur</option>
 				<option value="003">Venusaur</option>
@@ -330,9 +332,9 @@
 				<option value="151">Mew</option>
 			</select>
 		<div id="iv_input">
-			<div id="cp_span" class="iv_span">CP <input type="number" pattern="[0-9]*" name="cp" id="cp_field" class="iv_field"></div>
-			<div id="hp_span" class="iv_span">HP <input type="number" name="hp" pattern="[0-9]*" id="hp_field" class="iv_field"></div>
-			<div id="dust_span" class="iv_span">Stardust <input type="number" name="stardust" pattern="[0-9]*" id="dust_field" class="iv_field"></div>
+			<div id="cp_span" class="iv_span"><input type="number" pattern="[0-9]*" placeholder="Enter HP" name="cp" id="cp_field" class="iv_field"></div>
+			<div id="hp_span" class="iv_span"><input type="number" name="hp" pattern="[0-9]*" placeholder="Enter HP" id="hp_field" class="iv_field"></div>
+			<div id="dust_span" class="iv_span"><input type="number" name="stardust" pattern="[0-9]*" placeholder="Enter Stardust" id="dust_field" class="iv_field"></div>
 		</div>
 		<div id="iv_cal_div">
 			<button id="iv_cal_btn">Calculate</button>

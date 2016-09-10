@@ -12,7 +12,7 @@
 		"js": ["jquery-2.1.4.min.js","popup.js"]
 	}],
 	"background": {
-		"scripts": ["jquery-2.1.4.min.js","background.js"]
+		"scripts": ["jquery-2.1.4.min.js","background.js","pokedex.js"]
 	},
 	"browser_action" : {
 		"default_popup": "popup.html",
