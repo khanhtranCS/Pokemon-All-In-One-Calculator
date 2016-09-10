@@ -1209,75 +1209,75 @@ var pokemon = [
  }
 ];
 
-var boundsOfInterest = [0, 100, 200];
+var set_bounds = [0, 100, 200];
 function boundKeyForValue(value) {
-	var key;
-	var idx;
-	var boundValue;
-	var upperValue;
-	for (idx = 0; idx < boundsOfInterest.length; idx++) {
-		boundValue = boundsOfInterest[idx];
-		upperValue = boundsOfInterest[idx + 1];
-		if (!upperValue) {
+	var val_key;
+	var i;
+	var bound_key;
+	var upperBound;
+	for (i = 0; i < set_bounds.length; i++) {
+		bound_key = set_bounds[i];
+		upperBound = set_bounds[i + 1];
+		if (!upperBound) {
 			//We've reached the end
-			return boundValue + '+';
+			return bound_key + '+';
 		}
-		if (value >= boundValue && value < upperValue) {
-			return boundValue + '-' + upperValue;
+		if (value >= bound_key && value < upperBound) {
+			return bound_key + '-' + upperBound;
 		}
 	}
-	return key;
+	return val_key;
 }
-var boundKeys = boundsOfInterest.map(boundKeyForValue);
+var boundKeys = set_bounds.map(boundKeyForValue);
 
 var lookup_stats = {
-	byId : {},
-	byName : {},
-	byStamina : {},
-	byAttack : {},
-	byDefense : {},
+	id_based : {},
+	name_based : {},
+	sta_based : {},
+	atk_based : {},
+	def_based : {},
 };
 
 [
-	'byStamina',
-	'byAttack',
-	'byDefense'
+	'sta_based',
+	'atk_based',
+	'def_based'
 ].forEach(function (name) {
 	var dict = {
 		all : {}
 	};
-	boundKeys.forEach(function (key) {
-		dict[key] = [];
+	boundKeys.forEach(function (val_key) {
+		dict[val_key] = [];
 	});
 	lookup_stats[name] = dict;
 });
 
 $.each(pokemon, function (i,pokeData) {
 	// console.log(pokeData.id);
-	lookup_stats.byId[pokeData.id] = pokeData;
-	lookup_stats.byName[pokeData.name.toLowerCase()] = pokeData;
+	lookup_stats.id_based[pokeData.id] = pokeData;
+	lookup_stats.name_based[pokeData.name.toLowerCase()] = pokeData;
 	
-	lookup_stats.byStamina.all[pokeData.stamina] = lookup_stats.byStamina.all[pokeData.stamina] || [];
-	lookup_stats.byStamina.all[pokeData.stamina].push(pokeData);
-	lookup_stats.byStamina[boundKeyForValue(pokeData.stamina)].push(pokeData);
+	lookup_stats.sta_based.all[pokeData.stamina] = lookup_stats.sta_based.all[pokeData.stamina] || [];
+	lookup_stats.sta_based.all[pokeData.stamina].push(pokeData);
+	lookup_stats.sta_based[boundKeyForValue(pokeData.stamina)].push(pokeData);
 	
-	lookup_stats.byAttack.all[pokeData.attack] = lookup_stats.byAttack.all[pokeData.attack] || [];
-	lookup_stats.byAttack.all[pokeData.attack].push(pokeData);
-	lookup_stats.byAttack[boundKeyForValue(pokeData.attack)].push(pokeData);
+	lookup_stats.atk_based.all[pokeData.attack] = lookup_stats.atk_based.all[pokeData.attack] || [];
+	lookup_stats.atk_based.all[pokeData.attack].push(pokeData);
+	lookup_stats.atk_based[boundKeyForValue(pokeData.attack)].push(pokeData);
 	
-	lookup_stats.byDefense.all[pokeData.defense] = lookup_stats.byDefense.all[pokeData.defense] || [];
-	lookup_stats.byDefense.all[pokeData.defense].push(pokeData);
-	lookup_stats.byDefense[boundKeyForValue(pokeData.defense)].push(pokeData);
+	lookup_stats.def_based.all[pokeData.defense] = lookup_stats.def_based.all[pokeData.defense] || [];
+	lookup_stats.def_based.all[pokeData.defense].push(pokeData);
+	lookup_stats.def_based[boundKeyForValue(pokeData.defense)].push(pokeData);
 });
 
 function pokemonByName(name) {
 	console.log(lookup_stats);
-	return lookup_stats.byName[(name + '').toLowerCase()];
+	return lookup_stats.name_based[(name + '').toLowerCase()];
 }
 
 function pokemonById(id) {
 	var pokeId = parseInt(id, 10);
-	return lookup_stats.byId[pokeId];
+	return lookup_stats.id_based[pokeId];
 }
 
 // LevelUpData
@@ -1289,475 +1289,475 @@ var levels = [
   "cpScalar": 0.094
  },
  {
-  "level": 2,
+  "level": 1.5,
   "dust": 200,
   "candy": 1,
   "cpScalar": 0.1351374
  },
  {
-  "level": 3,
+  "level": 2,
   "dust": 200,
   "candy": 1,
   "cpScalar": 0.1663979
  },
  {
-  "level": 4,
+  "level": 2.5,
   "dust": 200,
   "candy": 1,
   "cpScalar": 0.1926509
  },
  {
-  "level": 5,
+  "level": 3,
   "dust": 400,
   "candy": 1,
   "cpScalar": 0.2157325
  },
  {
-  "level": 6,
+  "level": 3.5,
   "dust": 400,
   "candy": 1,
   "cpScalar": 0.2365727
  },
  {
-  "level": 7,
+  "level": 4,
   "dust": 400,
   "candy": 1,
   "cpScalar": 0.2557201
  },
  {
-  "level": 8,
+  "level": 4.5,
   "dust": 400,
   "candy": 1,
   "cpScalar": 0.2735304
  },
  {
-  "level": 9,
+  "level": 5,
   "dust": 600,
   "candy": 1,
   "cpScalar": 0.2902499
  },
  {
-  "level": 10,
+  "level": 5.5,
   "dust": 600,
   "candy": 1,
   "cpScalar": 0.3060574
  },
  {
-  "level": 11,
+  "level": 6,
   "dust": 600,
   "candy": 1,
   "cpScalar": 0.3210876
  },
  {
-  "level": 12,
+  "level": 6.5,
   "dust": 600,
   "candy": 1,
   "cpScalar": 0.335445
  },
  {
-  "level": 13,
+  "level": 7,
   "dust": 800,
   "candy": 1,
   "cpScalar": 0.3492127
  },
  {
-  "level": 14,
+  "level": 7.5,
   "dust": 800,
   "candy": 1,
   "cpScalar": 0.3624578
  },
  {
-  "level": 15,
+  "level": 8,
   "dust": 800,
   "candy": 1,
   "cpScalar": 0.3752356
  },
  {
-  "level": 16,
+  "level": 8.5,
   "dust": 800,
   "candy": 1,
   "cpScalar": 0.3875924
  },
  {
-  "level": 17,
+  "level": 9,
   "dust": 1000,
   "candy": 1,
   "cpScalar": 0.3995673
  },
  {
-  "level": 18,
+  "level": 9.5,
   "dust": 1000,
   "candy": 1,
   "cpScalar": 0.4111936
  },
  {
-  "level": 19,
+  "level": 10,
   "dust": 1000,
   "candy": 1,
   "cpScalar": 0.4225
  },
  {
-  "level": 20,
+  "level": 10.5,
   "dust": 1000,
   "candy": 1,
   "cpScalar": 0.4335117
  },
  {
-  "level": 21,
+  "level": 11,
   "dust": 1300,
   "candy": 2,
   "cpScalar": 0.4431076
  },
  {
-  "level": 22,
+  "level": 11.5,
   "dust": 1300,
   "candy": 2,
   "cpScalar": 0.45306
  },
  {
-  "level": 23,
+  "level": 12,
   "dust": 1300,
   "candy": 2,
   "cpScalar": 0.4627984
  },
  {
-  "level": 24,
+  "level": 12.5,
   "dust": 1300,
   "candy": 2,
   "cpScalar": 0.4723361
  },
  {
-  "level": 25,
+  "level": 13,
   "dust": 1600,
   "candy": 2,
   "cpScalar": 0.481685
  },
  {
-  "level": 26,
+  "level": 13.5,
   "dust": 1600,
   "candy": 2,
   "cpScalar": 0.4908558
  },
  {
-  "level": 27,
+  "level": 14,
   "dust": 1600,
   "candy": 2,
   "cpScalar": 0.4998584
  },
  {
-  "level": 28,
+  "level": 14.5,
   "dust": 1600,
   "candy": 2,
   "cpScalar": 0.5087018
  },
  {
-  "level": 29,
+  "level": 15,
   "dust": 1900,
   "candy": 2,
   "cpScalar": 0.517394
  },
  {
-  "level": 30,
+  "level": 15.5,
   "dust": 1900,
   "candy": 2,
   "cpScalar": 0.5259425
  },
  {
-  "level": 31,
+  "level": 16,
   "dust": 1900,
   "candy": 2,
   "cpScalar": 0.5343543
  },
  {
-  "level": 32,
+  "level": 16.5,
   "dust": 1900,
   "candy": 2,
   "cpScalar": 0.5426358
  },
  {
-  "level": 33,
+  "level": 17,
   "dust": 2200,
   "candy": 2,
   "cpScalar": 0.5507927
  },
  {
-  "level": 34,
+  "level": 17.5,
   "dust": 2200,
   "candy": 2,
   "cpScalar": 0.5588306
  },
  {
-  "level": 35,
+  "level": 18,
   "dust": 2200,
   "candy": 2,
   "cpScalar": 0.5667545
  },
  {
-  "level": 36,
+  "level": 18.5,
   "dust": 2200,
   "candy": 2,
   "cpScalar": 0.5745692
  },
  {
-  "level": 37,
+  "level": 19,
   "dust": 2500,
   "candy": 2,
   "cpScalar": 0.5822789
  },
  {
-  "level": 38,
+  "level": 19.5,
   "dust": 2500,
   "candy": 2,
   "cpScalar": 0.5898879
  },
  {
-  "level": 39,
+  "level": 20,
   "dust": 2500,
   "candy": 2,
   "cpScalar": 0.5974
  },
  {
-  "level": 40,
+  "level": 20.5,
   "dust": 2500,
   "candy": 2,
   "cpScalar": 0.6048188
  },
  {
-  "level": 41,
+  "level": 21,
   "dust": 3000,
   "candy": 3,
   "cpScalar": 0.6121573
  },
  {
-  "level": 42,
+  "level": 21.5,
   "dust": 3000,
   "candy": 3,
   "cpScalar": 0.6194041
  },
  {
-  "level": 43,
+  "level": 22,
   "dust": 3000,
   "candy": 3,
   "cpScalar": 0.6265671
  },
  {
-  "level": 44,
+  "level": 22.5,
   "dust": 3000,
   "candy": 3,
   "cpScalar": 0.6336492
  },
  {
-  "level": 45,
+  "level": 23,
   "dust": 3500,
   "candy": 3,
   "cpScalar": 0.640653
  },
  {
-  "level": 46,
+  "level": 23.5,
   "dust": 3500,
   "candy": 3,
   "cpScalar": 0.647581
  },
  {
-  "level": 47,
+  "level": 24,
   "dust": 3500,
   "candy": 3,
   "cpScalar": 0.6544356
  },
  {
-  "level": 48,
+  "level": 24.5,
   "dust": 3500,
   "candy": 3,
   "cpScalar": 0.6612193
  },
  {
-  "level": 49,
+  "level": 25,
   "dust": 4000,
   "candy": 3,
   "cpScalar": 0.667934
  },
  {
-  "level": 50,
+  "level": 25.5,
   "dust": 4000,
   "candy": 3,
   "cpScalar": 0.6745819
  },
  {
-  "level": 51,
+  "level": 26,
   "dust": 4000,
   "candy": 4,
   "cpScalar": 0.6811649
  },
  {
-  "level": 52,
+  "level": 26.5,
   "dust": 4000,
   "candy": 4,
   "cpScalar": 0.6876849
  },
  {
-  "level": 53,
+  "level": 27,
   "dust": 4500,
   "candy": 4,
   "cpScalar": 0.6941437
  },
  {
-  "level": 54,
+  "level": 27.5,
   "dust": 4500,
   "candy": 4,
   "cpScalar": 0.7005429
  },
  {
-  "level": 55,
+  "level": 28,
   "dust": 4500,
   "candy": 4,
   "cpScalar": 0.7068842
  },
  {
-  "level": 56,
+  "level": 28.5,
   "dust": 4500,
   "candy": 4,
   "cpScalar": 0.7131691
  },
  {
-  "level": 57,
+  "level": 29,
   "dust": 5000,
   "candy": 4,
   "cpScalar": 0.7193991
  },
  {
-  "level": 58,
+  "level": 29.5,
   "dust": 5000,
   "candy": 4,
   "cpScalar": 0.7255756
  },
  {
-  "level": 59,
+  "level": 30,
   "dust": 5000,
   "candy": 4,
   "cpScalar": 0.7317
  },
  {
-  "level": 60,
+  "level": 30.5,
   "dust": 5000,
   "candy": 4,
   "cpScalar": 0.734741
  },
  {
-  "level": 61,
+  "level": 31,
   "dust": 6000,
   "candy": 6,
   "cpScalar": 0.7377695
  },
  {
-  "level": 62,
+  "level": 31.5,
   "dust": 6000,
   "candy": 6,
   "cpScalar": 0.7407856
  },
  {
-  "level": 63,
+  "level": 32,
   "dust": 6000,
   "candy": 6,
   "cpScalar": 0.7437894
  },
  {
-  "level": 64,
+  "level": 32.5,
   "dust": 6000,
   "candy": 6,
   "cpScalar": 0.7467812
  },
  {
-  "level": 65,
+  "level": 33,
   "dust": 7000,
   "candy": 8,
   "cpScalar": 0.749761
  },
  {
-  "level": 66,
+  "level": 33.5,
   "dust": 7000,
   "candy": 8,
   "cpScalar": 0.7527291
  },
  {
-  "level": 67,
+  "level": 34,
   "dust": 7000,
   "candy": 8,
   "cpScalar": 0.7556855
  },
  {
-  "level": 68,
+  "level": 34.5,
   "dust": 7000,
   "candy": 8,
   "cpScalar": 0.7586304
  },
  {
-  "level": 69,
+  "level": 35,
   "dust": 8000,
   "candy": 10,
   "cpScalar": 0.7615638
  },
  {
-  "level": 70,
+  "level": 35.5,
   "dust": 8000,
   "candy": 10,
   "cpScalar": 0.7644861
  },
  {
-  "level": 71,
+  "level": 36,
   "dust": 8000,
   "candy": 10,
   "cpScalar": 0.7673972
  },
  {
-  "level": 72,
+  "level": 36.5,
   "dust": 8000,
   "candy": 10,
   "cpScalar": 0.7702973
  },
  {
-  "level": 73,
+  "level": 37,
   "dust": 9000,
   "candy": 12,
   "cpScalar": 0.7731865
  },
  {
-  "level": 74,
+  "level": 37.5,
   "dust": 9000,
   "candy": 12,
   "cpScalar": 0.776065
  },
  {
-  "level": 75,
+  "level": 38,
   "dust": 9000,
   "candy": 12,
   "cpScalar": 0.7789328
  },
  {
-  "level": 76,
+  "level": 38.5,
   "dust": 9000,
   "candy": 12,
   "cpScalar": 0.7817901
  },
  {
-  "level": 77,
+  "level": 39,
   "dust": 10000,
   "candy": 15,
   "cpScalar": 0.784637
  },
  {
-  "level": 78,
+  "level": 39.5,
   "dust": 10000,
   "candy": 15,
   "cpScalar": 0.7874736
  },
  {
-  "level": 79,
+  "level": 40,
   "dust": 10000,
   "candy": 15,
   "cpScalar": 0.7903
  },
  {
-  "level": 80,
+  "level": 40.5,
   "dust": 10000,
   "candy": 15,
   "cpScalar": 0.7931164
@@ -1807,10 +1807,10 @@ function grade(value) {
 	var letter;
 	var modifier;
 
-	var idx;
+	var i;
 	var grade;
-	for (idx = 0; idx < letterGrades.length; idx++) {
-		grade = letterGrades[idx];
+	for (i = 0; i < letterGrades.length; i++) {
+		grade = letterGrades[i];
 		if (value >= grade.min) {
 			letter = grade.letter;
 			if (value < grade.mid) {
