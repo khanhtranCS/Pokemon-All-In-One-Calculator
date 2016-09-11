@@ -324,7 +324,7 @@ function display_evolve_info(message) {
 			// retrive time left from current time and source time (provided by API)
 			var curr_time = new Date();
 			var src_time = new Date(curr_poke.until);
-			console.log(curr_poke.name);
+			//console.log(curr_poke.name);
 			var time_left = getTimeLeft (curr_time, src_time);
 			time.innerHTML = time_left;
 			time.style.color = rgb(r, g, b);
@@ -339,8 +339,8 @@ function display_evolve_info(message) {
 }
 
 function getTimeLeft(curr_time, src_time) {
-	console.log("curr time is " + curr_time);
-	console.log("src time is " + src_time);
+	//console.log("curr time is " + curr_time);
+	//console.log("src time is " + src_time);
 	var curr_hour = parseInt(curr_time.getHours());
 	var src_hour = parseInt(curr_time.getHours());
 	var curr_minutes = parseInt(curr_time.getMinutes());
@@ -365,6 +365,8 @@ function getTimeLeft(curr_time, src_time) {
 	} else if (src_hour > curr_hour) {
 		var time_left = src_minutes + (60 - curr_minutes);
 
+	} if (src_hour < curr_hour) {
+		return "Disappeared";
 	}
 
 	return time_left + time_type;
