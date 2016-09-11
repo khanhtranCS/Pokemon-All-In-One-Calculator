@@ -89,19 +89,42 @@ function appendChildNode(parent_node,arr_obj) {
 	}
 }
 
+function arrayMin(arr) {
+  var len = arr.length, min = Infinity;
+  while (len--) {
+    if (arr[len] < min) {
+      min = arr[len];
+    }
+  }
+  return toTheTenth(min);
+};
+
+function arrayMax(arr) {
+  var len = arr.length, max = -Infinity;
+  while (len--) {
+    if (arr[len] > max) {
+      max = arr[len];
+    }
+  }
+  return toTheTenth(max);
+};
+
 function display_iv_info(response, poke_id) {
+
 	document.getElementById("iv_result").innerHTML = "";
 	var result_area = document.getElementById("iv_result");
 	var poke_icon = document.createElement("img");
 	poke_icon.id = "poke_png";
 	poke_icon.alt = "pokemon";
 	poke_icon.src = "https://s3-eu-west-1.amazonaws.com/pokesnipers/custom_images/" + poke_id + ".png";
+	var num_possible = document.createElement("h2");
+	num_possible.id = "num_possible";
+
 	result_area.appendChild(poke_icon);
+	result_area.appendChild(num_possible);
 	if(response == "" || response.ivs.length == 0) {
-		result_area.innerHTML = "No Possible IVs Combination Found!!!";
+		num_possible.innerHTML = "No Possible IVs Combination Found!!!";
 	} else {
-		var num_possible = document.createElement("h2");
-		num_possible.id = "num_possible";
 		var perf_range = document.createElement("h2");
 		perf_range.id = "perf_range";
 		perf_range.innerHTML = "Perfect Range";
@@ -113,7 +136,7 @@ function display_iv_info(response, poke_id) {
 		avg_range_div = document.createElement("div");
 		avg_range_div.id = "avg_range_div";
 
-		var arr_obj = {type:"intro_result", arr: [num_possible, perf_range, perf_range_div, avg_range, avg_range_div]};
+		var arr_obj = {type:"intro_result", arr: [perf_range, perf_range_div, avg_range, avg_range_div]};
 		appendChildNode(result_area, arr_obj);
 
 		var result_table = document.createElement("table");
@@ -142,11 +165,16 @@ function display_iv_info(response, poke_id) {
 			appendChildNode(stat_row, arr_obj);
 			result_table.appendChild(stat_row);
 		}
+		console.log(perf_lst);
 		result_area.appendChild(result_table);
 		num_possible.innerHTML = length_ivs + " Possible IVs Combination";
-		perf_range_div.innerHTML = Math.min(perf_lst) + "% - " + Math.max(perf_lst) + "%";
+		perf_range_div.innerHTML = arrayMin(perf_lst) + "% - " + arrayMax(perf_lst) + "%";
 		avg_range_div.innerHTML = getAverage(perf_lst) + "%";
 	}
+}
+
+function toTheTenth(value) {
+	return Math.round(10 * value) / 10;
 }
 
 function getAverage(arr) {
@@ -155,7 +183,7 @@ function getAverage(arr) {
 	for(var i = 0; i < arr_length; i++) {
 		total += arr[i];
 	}
-	return total/arr_length;
+	return toTheTenth(total/arr_length);
 }
 
 chrome.runtime.onMessage.addListener(
@@ -296,6 +324,7 @@ function display_evolve_info(message) {
 			// retrive time left from current time and source time (provided by API)
 			var curr_time = new Date();
 			var src_time = new Date(curr_poke.until);
+			console.log(curr_poke.name);
 			var time_left = getTimeLeft (curr_time, src_time);
 			time.innerHTML = time_left;
 			time.style.color = rgb(r, g, b);
@@ -310,6 +339,8 @@ function display_evolve_info(message) {
 }
 
 function getTimeLeft(curr_time, src_time) {
+	console.log("curr time is " + curr_time);
+	console.log("src time is " + src_time);
 	var curr_hour = parseInt(curr_time.getHours());
 	var src_hour = parseInt(curr_time.getHours());
 	var curr_minutes = parseInt(curr_time.getMinutes());
@@ -319,10 +350,10 @@ function getTimeLeft(curr_time, src_time) {
 	var time_type = " Minutes left";
 
 	if (curr_hour == src_hour) {
-		console.log("current minutes " + curr_minutes);
-		console.log("src minutes " + src_minutes);
-		console.log("current hour " + curr_hour);
-		console.log("src hour " + src_hour);
+		// console.log("current minutes " + curr_minutes);
+		// console.log("src minutes " + src_minutes);
+		// console.log("current hour " + curr_hour);
+		// console.log("src hour " + src_hour);
 		var time_left = src_minutes - curr_minutes;
 		if (time_left <= 0) {
 			time_type = " Seconds left"

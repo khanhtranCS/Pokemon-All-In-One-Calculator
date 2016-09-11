@@ -10,6 +10,11 @@ td {
 	padding-left: 5px;
 }
 
+#donate {
+	margin-bottom: 5px;
+	text-align: center;
+}
+
 #snipe {
 	text-align: center;
 }
@@ -53,14 +58,6 @@ td {
 	float:left;
 }
 
-table:nth-child(odd) {
-	background-color:rgb(255, 242, 153);
-}
-
-td {
-	border: 1px solid black;
-	text-align: center;
-}
 
 #status, #result {
 	display: none;
@@ -108,7 +105,7 @@ h6 {
 	border: 1px solid green;
 	float:left;
 	border-radius: 15px;
-	background-color: green;
+	background-color: #a4e495;
 	font-style: bold;
 	margin-right: 3px;
 	opacity: 0.8;
@@ -119,7 +116,7 @@ h6 {
 	background-color: yellow;
 	cursor: pointer;
 }
-#refresh_btn:hover, #evolve:hover{
+#refresh_btn:hover, #evolve:hover, #iv_cal_btn:hover, #dust_field:hover, #op_animal_iv:hover, #op_animal_cp:hover, #powered_bool:hover{
 	cursor: pointer;
 }
 
@@ -197,6 +194,7 @@ h6 {
 .title_td, .stat_td {
 	font-size: 1.5em;
 	border:none;
+	text-align: center;
 }
 
 .title_td {
@@ -209,4 +207,8 @@ h6 {
 	height: 50px;
 	margin-bottom: 5px;
 	margin-top: 15px;
+}
+
+tr {
+	border-bottom: 1px solid #ddd;
 }
