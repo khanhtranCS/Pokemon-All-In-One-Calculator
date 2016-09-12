@@ -2,6 +2,9 @@
 ===================
 An All-in-One Pokemon tool (chrome extension) that will calculate cp, iv, and poke snipe location of rare pokemon
 -----------------
+Link to download working extension:
+http://goo.gl/6I2V63
+-----------------
 **Functionality**
 - Calculate Possible pokemon's cp after each evolution
 - Snipe rare pokemon location around the world

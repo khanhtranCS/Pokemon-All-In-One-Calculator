@@ -17,6 +17,7 @@ function setVisible() {
 	} else if(this.id == "iv_button") {  // if iv button is clicked
 		setVisibleByType("none", "block", "none");
 	} else if(this.id == "snipe_button") {  // if snipe button is clicked
+		processSnipe();
 		setVisibleByType("none", "none", "block");
 	}
 	//document.getElementById("cp_cal").style.display = "block";
