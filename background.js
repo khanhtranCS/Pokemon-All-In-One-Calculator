@@ -40,6 +40,7 @@ chrome.runtime.onMessage.addListener(
 			} else if (request.type == "poke_snipe") {
 				//console.log("newest json_String " + JSON_string);
 				if (JSON_string != "") {
+          requestPokeLoc();
 					sendResponse({msg: JSON_string});
 				} else {
 					//console.log("error!!!");
@@ -110,6 +111,13 @@ function processInfo() {
 // }
 
 function requestPokeLoc() {
+  // $.ajax({
+  //   url: "http://pokesnipers.com/api/v1/pokemon.json";
+  //   dataType: "json";
+  //   success: function(data) {
+  //     JSON_string = JSON_stringify(data);
+  //   }
+  // });
 	$.getJSON("http://pokesnipers.com/api/v1/pokemon.json", function(data) {
 		//console.log(data);
 		//console.log(JSON.stringify(data));
