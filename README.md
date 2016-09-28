@@ -23,4 +23,4 @@ UPdate logs (v1.2):
 - update input that only allow number to prevent client from mistakenly input text
 - Limited user to only select list of correct amount of stardust required (range between 200 -> 10000)
 - changed “cp calculator” table appearance
-- changed panel button color
+- changed panel button color.
